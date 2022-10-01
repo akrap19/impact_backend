@@ -103,7 +103,7 @@ const updateLoggedTo = async (req: Request, res: Response, next: NextFunction) =
 
     let existingUser;
     try{ 
-        existingUser = await User.findOneAndUpdate({ username }, {loggedTo: deviceId})
+        existingUser = await User.findOneAndUpdate({ username }, {loggedTo: Number(deviceId)})
     } catch(err) {
         const error = new HttpError('User not found..', 500);
         return next(error);

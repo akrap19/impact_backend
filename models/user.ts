@@ -3,4 +3,5 @@ export interface IUser {
     username?: String;
     password?: String;
     wallet?: String;
+    loggedTo?: Number;
 }

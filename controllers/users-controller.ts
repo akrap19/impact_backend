@@ -19,6 +19,20 @@ const getUser = async (req: any, res: Response, next: NextFunction) => {
     res.status(200).json({ user: user })
 };
 
+const getUserByDeviceId = async (req: any, res: Response, next: NextFunction) => {
+    const deviceId = req.params.deviceId
+    let user;
+
+    try {
+        user = await User.findOne({loggedTo: deviceId})
+    } catch(err) {
+        const error = new HttpError('Fetching users faild...', 500);
+        return next(error);
+    }
+
+    res.status(200).json({ user: user })
+};
+
 const signup = async (req: Request, res: Response, next: NextFunction) => {
     const errors: Result<ValidationError> = validationResult(req);
     if(!errors.isEmpty()){
@@ -84,6 +98,22 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     res.json({message: 'Logged in!'});
 }
 
+const updateLoggedTo = async (req: Request, res: Response, next: NextFunction) => {
+    const { username, deviceId } = req.body;
+
+    let existingUser;
+    try{ 
+        existingUser = await User.findOneAndUpdate({ username }, {loggedTo: deviceId})
+    } catch(err) {
+        const error = new HttpError('User not found..', 500);
+        return next(error);
+    }
+
+    res.json({message: 'User updated!'});
+}
+
 exports.getUser = getUser;
+exports.getUserByDeviceId = getUserByDeviceId;
 exports.signup = signup;
 exports.login = login;
+exports.updateLoggedTo = updateLoggedTo;

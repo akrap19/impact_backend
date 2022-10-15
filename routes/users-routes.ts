@@ -9,7 +9,7 @@ router.get('/:wallet', userController.getUser);
 
 router.get('/getUserByDeviceId/:deviceId', userController.getUserByDeviceId);
 
-router.post('/signup', [check('username').not().isEmpty(), check('password').not().isEmpty()], userController.signup);
+router.post('/signup', [check('username').not().isEmpty().isLength({min: 2, max: 9}), check('password').not().isEmpty().isLength({min: 6}).matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/).matches(/^(?=.*[0-9])(?=.*[a-zA-Z])(?=\S+$).{6,200}$/).matches(/^(?=.*[A-Z])(?=\S+$).{6,200}$/)], userController.signup);
 
 router.post('/login', userController.login);
 
